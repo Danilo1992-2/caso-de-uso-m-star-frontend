@@ -1,0 +1,47 @@
+.product-list-dropdown {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+.selected-product-details {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.delete-button {
+  background-color: #ff5757;
+  color: #fff;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.output-button,
+.entry-button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  background-color: #d23f3f;
+}
+
+.delete-button,
+.entry-button,
+.output-button {
+  margin-right: 3px;
+}
