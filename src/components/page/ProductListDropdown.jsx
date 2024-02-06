@@ -5,6 +5,7 @@ import '../style/ProductListDropdown.css';
 const ProductListDropdown = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [availableQuantity, setAvailableQuantity] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +28,26 @@ const ProductListDropdown = () => {
     fetchData();
   }, []);
 
-  
+  const fetchAvailable = async (productId) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/item/avalible', {
+        product_id: productId,
+      });
+      if (response.status === 200) {
+        setAvailableQuantity(response.data.Response);
+      } else {
+        alert('Erro ao verificar disponibilidade:', response.data.Response);
+      }
+    } catch (error) {
+      alert('Erro ao verificar disponibilidade:', error);
+    }
+  };
 
   const handleProductChange = (event) => {
     const selectedProductId = event.target.value;
     const selectedProduct = products.find((product) => product.id === parseInt(selectedProductId));
     setSelectedProduct(selectedProduct);
+    fetchAvailable(selectedProductId);
   };
 
   const handleDeleteProduct = async () => {
@@ -103,6 +118,9 @@ const ProductListDropdown = () => {
           </p>
           <p>
             <strong>Descrição:</strong> {selectedProduct.description}
+          </p>
+          <p>
+            <strong>Disponibilidade:</strong> {availableQuantity}
           </p>
           <button className="delete-button" onClick={handleDeleteProduct}>
             Deletar Produto
