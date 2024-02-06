@@ -13,10 +13,14 @@ const ProductListDropdown = () => {
         if (response.status === 200) {
           setProducts(response.data.Response);
         } else {
-          alert('Erro ao obter produtos. Status da resposta:', response.status);
+          alert('Erro ao obter produtos:', response.data.Response);
         }
       } catch (error) {
-        alert('Erro ao obter produtos:', error);
+        setTimeout(() => {
+          fetchData().catch((error) => {
+            alert('Erro na segunda tentativa:', error);
+          });
+        }, 1000);
       }
     };
 
@@ -38,7 +42,7 @@ const ProductListDropdown = () => {
         if (response.status === 200) {
           alert(`Produto deletado!`);
         } else {
-          alert('Erro ao deletar o produto. Status da resposta:', response.status);
+          alert('Erro ao deletar o produto:', response.data.Response);
         }
       } catch (error) {
         alert('Erro ao deletar o produto:', error);
@@ -56,7 +60,7 @@ const ProductListDropdown = () => {
       if (response.status === 200) {
         alert(`Entrada registrada com sucesso!`);
       } else {
-        alert(`Erro ao registrar entrada. Status da resposta:`, response.status);
+        alert(`Erro ao registrar entrada:`, response.data.Response);
       }
     } catch (error) {
       alert(`Erro ao registrar entrada:`, error);
@@ -71,7 +75,7 @@ const ProductListDropdown = () => {
       if (response.status === 200) {
         alert(`Saída registrada com sucesso!`);
       } else {
-        alert(`Erro ao registrar saída. Status da resposta:`, response.status);
+        alert(`Erro ao registrar saída:`, response.data.Response);
       }
     } catch (error) {
       alert(`Erro ao registrar saída:`, error);

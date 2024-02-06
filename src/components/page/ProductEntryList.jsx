@@ -13,10 +13,14 @@ const ProductEntryList = () => {
         if (response.status === 200) {
           setProductEntries(response.data.Response);
         } else {
-          alert('Erro ao obter dados de entrada. Status da resposta:', response.status);
+          alert('Erro ao criar o produto');
         }
       } catch (error) {
-        alert('Erro ao obter dados de entrada:', error);
+        setTimeout(() => {
+          fetchData().catch((error) => {
+            alert('Erro na segunda tentativa:', error);
+          });
+        }, 1000);
       }
     };
 
@@ -36,7 +40,7 @@ const ProductEntryList = () => {
 
   return (
     <div className='product-entry-list-container'>
-      <h1>Lista de Entradas de Produtos</h1>
+      <h1>Lista de Produtos</h1>
       <button onClick={exportToExcel}>Exportar para Excel</button>
       <table>
         <thead>

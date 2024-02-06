@@ -19,7 +19,11 @@ const ChartPage = () => {
         setEntryData(entryResponse.data.Response);
         setOutputData(outputResponse.data.Response);
       } catch (error) {
-        alert('Erro ao obter dados:', error);
+        setTimeout(() => {
+          fetchData().catch((error) => {
+            alert('Erro ao consultar dados para o gráfico:', error);
+          });
+        }, 1000);
       }
     };
 
@@ -40,7 +44,7 @@ const ChartPage = () => {
     return entry;
   });
   const downloadPDF = async () => {
-
+  try{  
       const entryResponse = await axios.get('http://localhost:5000/api/product/entry');
       const outputResponse = await axios.get('http://localhost:5000/api/product/output');
   
@@ -73,6 +77,10 @@ const ChartPage = () => {
                                             ),
       });
       pdf.save('chart-export.pdf');
+    }
+    catch(error){
+      setTimeout(downloadPDF, 1000);
+    }
 
   };
   

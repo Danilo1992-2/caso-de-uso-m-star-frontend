@@ -43,12 +43,18 @@ const CreateProduct = () => {
   };
 
   const handleCreateProduct = async () => {
+    const errorMessage = "";
     if (validateForm()) {
       try {
-        await axios.post('http://localhost:5000/api/product', newProduct);
-        alert('Novo produto criado com sucesso!');
+          const response = await axios.post('http://localhost:5000/api/product', newProduct);
+          if (response.status === 200) {
+            setNewProduct(response.data.Response);
+            alert(response.data.Response)
+          } else {
+            alert('Erro: ', response.data);
+          }
       } catch (error) {
-        alert('Erro ao criar o produto:', error);
+            alert('Erro ao criar o produto:', error);
       }
     }
   };
