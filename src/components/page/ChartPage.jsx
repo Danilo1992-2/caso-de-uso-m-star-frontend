@@ -3,6 +3,8 @@ import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import '../style/ChartPage.css';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 
 const ChartPage = () => {
   const [entryData, setEntryData] = useState([]);
@@ -37,16 +39,43 @@ const ChartPage = () => {
 
     return entry;
   });
+  const downloadPDF = async () => {
 
-  const downloadPDF = () => {
-    const chartRef = document.getElementById('chart-container');
+      const entryResponse = await axios.get('http://localhost:5000/api/product/entry');
+      const outputResponse = await axios.get('http://localhost:5000/api/product/output');
+  
+      const entryProductData = entryResponse.data.Response;
+      const outputProductData = outputResponse.data.Response;
+  
+      const pdf = new jsPDF();
+      pdf.text('Entradas e saídas', 20, 10);
 
-    const pdf = new jsPDF();
-    pdf.text('Comparativo de Entrada e Saída', 20, 10);
-    pdf.html(chartRef);
-    pdf.save('chart-export.pdf');
+      const objectColumns = ['product_name','description', 'product_code', 'product_manufacturer', 'product_type', 'data entrada/saida', 'status']
+      pdf.autoTable({
+        head: [objectColumns],
+        body: entryProductData.map(obj => [obj.product_name, 
+                                            obj.description, 
+                                            obj.product_code, 
+                                            obj.product_manufacturer, 
+                                            obj.product_type, 
+                                            obj.status_date,
+                                            'entrada']),
+      });
+      pdf.autoTable({
+        head: [objectColumns],
+        body: outputProductData.map(obj => [obj.product_name, 
+                                            obj.description, 
+                                            obj.product_code, 
+                                            obj.product_manufacturer, 
+                                            obj.product_type, 
+                                            obj.status_date,
+                                            'saída'],
+                                            ),
+      });
+      pdf.save('chart-export.pdf');
+
   };
-
+  
   return (
     <div className='chart-page-container'>
       <h1>Comparativo de Entrada e Saída</h1>
@@ -61,6 +90,7 @@ const ChartPage = () => {
           <Bar dataKey="outputTotal" fill="#82ca9d" name="Saída" />
         </BarChart>
       </div>
+      <button onClick={downloadPDF}>Exportar para PDF</button>
     </div>
   );
 };
