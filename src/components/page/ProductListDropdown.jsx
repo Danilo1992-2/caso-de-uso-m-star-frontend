@@ -28,20 +28,21 @@ const ProductListDropdown = () => {
     fetchData();
   }, []);
 
-  const fetchAvailable = async (productId) => {
-    try {
-      const response = await axios.post('http://localhost:5000/api/item/avalible', {
-        product_id: productId,
-      });
-      if (response.status === 200) {
-        setAvailableQuantity(response.data.Response);
-      } else {
-        alert('Erro ao verificar disponibilidade:', response.data.Response);
+  const fetchAvailable = async () =>{ 
+    if (selectedProduct){
+      try {
+        const response = await axios.get(`http://localhost:5000/api/item/avalible/${selectedProduct.id}`);
+
+        if (response.status === 200) {
+          setAvailableQuantity(response.data.Response);
+        } else {
+          alert('Erro ao verificar disponibilidade:', response.data.Response);
+        }
+      } catch (error) {
+        alert('Erro ao verificar disponibilidade:', error);
       }
-    } catch (error) {
-      alert('Erro ao verificar disponibilidade:', error);
-    }
-  };
+  }
+};
 
   const handleProductChange = (event) => {
     const selectedProductId = event.target.value;
